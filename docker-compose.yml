@@ -1,0 +1,27 @@
+services:
+  web:
+    build: .
+    volumes:
+      - .:/app
+    ports: ["3000:3000"]
+    environment:
+      - DATABASE_HOST=db
+      - DATABASE_USERNAME=root
+      - DATABASE_PASSWORD=password
+      - RAILS_ENV=development
+    depends_on: [db, redis]
+
+  db:
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    volumes:
+      - db-data:/var/lib/mysql
+
+  redis:
+    image: redis:7
+    restart: always
+
+volumes:
+  db-data:
